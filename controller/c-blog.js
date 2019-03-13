@@ -110,7 +110,7 @@ exports.saveImage = async (ctx) => {
     ctx.body = { code: 0, message: '图片上传失败' };
   }
 }
-//还有问题
+
 exports.editUserInfo = async (ctx) => {
   const { avator, username, password, email } = ctx.request.body;
   const id = ctx.session.personalInfo.id;
@@ -134,6 +134,27 @@ exports.editUserInfo = async (ctx) => {
     delete resPersonalInfo.password;
     delete resPersonalInfo.id;
     ctx.body = { code: 1, message: '保存成功', data: resPersonalInfo };
+  })
+}
+
+exports.comment = async ctx => {
+  const { articleid, comment } = ctx.request.body;
+  const userid = ctx.session.personalInfo.id;
+  await blogModel.comment([articleid, userid, comment]).then(res => {
+    ctx.body = { code: 1, message: '发布成功' };
+  }).catch(err => {
+    ctx.status = 500;
+    ctx.body = err;
+  })
+}
+
+exports.getCommentList = async ctx => {
+  const { articleid } = ctx.query;
+  await blogModel.getCommentList([articleid]).then(res => {
+    ctx.body = { code: 1, message: 'success', data: res }
+  }).catch(err => {
+    ctx.status = 500;
+    ctx.body = err;
   })
 }
 
