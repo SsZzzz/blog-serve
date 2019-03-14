@@ -151,7 +151,46 @@ exports.comment = async ctx => {
 exports.getCommentList = async ctx => {
   const { articleid } = ctx.query;
   await blogModel.getCommentList([articleid]).then(res => {
-    ctx.body = { code: 1, message: 'success', data: res }
+    const data = [];
+    res.map((v, i) => {
+      let flag = false;
+      data.map((v2, i2) => {
+        if (v2.id === v.id) {
+          v2.subCommentList.push({
+            subId: v.subId,
+            subComment: v.subComment,
+            subReply: v.subReply,
+            subReleaseTime: v.subReleaseTime,
+            subAvator: v.subAvator,
+            subUsername: v.subUsername
+          })
+          flag = true;
+        }
+      })
+      if (!flag) {
+        data.push({
+          id: v.id,
+          comment: v.comment,
+          releaseTime: v.releaseTime,
+          avator: v.avator,
+          username: v.username,
+          subCommentList: null
+        })
+        if (v.subId) {
+          data[data.length - 1].subCommentList = [
+            {
+              subId: v.subId,
+              subComment: v.subComment,
+              subReply: v.subReply,
+              subReleaseTime: v.subReleaseTime,
+              subAvator: v.subAvator,
+              subUsername: v.subUsername
+            }
+          ]
+        }
+      }
+    })
+    ctx.body = { code: 1, message: 'success', data }
   }).catch(err => {
     ctx.status = 500;
     ctx.body = err;
