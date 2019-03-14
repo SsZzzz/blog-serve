@@ -158,6 +158,17 @@ exports.getCommentList = async ctx => {
   })
 }
 
+exports.replyComment = async ctx => {
+  const { commentid, comment, reply } = ctx.request.body;
+  const userid = ctx.session.personalInfo.id;
+  await blogModel.replyComment([commentid, userid, comment, reply]).then(res => {
+    ctx.body = { code: 1, message: '回复成功' };
+  }).catch(err => {
+    ctx.status = 500;
+    ctx.body = err;
+  })
+}
+
 function isSummary(str) {
   const execSummaryRes = />(.+)/g.exec(str);
   if (execSummaryRes) {

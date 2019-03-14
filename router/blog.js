@@ -26,5 +26,6 @@ router.post('/saveImage', upload.single('image'), controller.saveImage);
 router.post('/editUserInfo', controller.editUserInfo);
 router.post('/comment', controller.comment);
 router.get('/getCommentList', controller.getCommentList);
+router.post('/replyComment', controller.replyComment);
 
 module.exports = router;
