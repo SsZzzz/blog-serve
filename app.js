@@ -22,8 +22,8 @@ app.use(bodyParser());
 app.use(session(sessionConfig, app));
 app.use(static(__dirname));
 
-router.use('/management', require('./router/management').routes());
-router.use('/blog', require('./router/blog').routes());
+router.use('/blog-serve/management', require('./router/management').routes());
+router.use('/blog-serve/blog', require('./router/blog').routes());
 
 app.use(router.routes())//启动路由
     .use(router.allowedMethods());//建议加上
