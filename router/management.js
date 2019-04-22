@@ -20,8 +20,10 @@ router.post('/login', controller.login);
 router.post('/register', controller.register);
 router.get('/getLabel', controller.getLabel);
 router.post('/saveArticle', controller.saveArticle);
+router.post('/updateArticle', controller.updateArticle);
 router.post('/saveImage', upload.single('file'), controller.saveImage);
 router.get('/getSummary', controller.getSummary);
 router.get('/getOneWeekLoginData', controller.getOneWeekLoginData);
+router.post('/delArticle', controller.delArticle);
 
 module.exports = router;

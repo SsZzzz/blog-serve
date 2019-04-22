@@ -51,11 +51,21 @@ exports.saveArticle = async (ctx) => {
     label.map(async v => {
       await managementModel.saveLabel([res, v])
     })
-    ctx.body = { code: 1, message: '保存成功' };
+    ctx.body = { code: 1, message: '保存成功', data: { id: res } };
   }).catch(err => {
     ctx.status = 500;
     ctx.body = err;
   })
+}
+
+exports.updateArticle = async (ctx) => {
+  const { title, titleImage, content, label, id } = ctx.request.body;
+  await managementModel.updateArticle([title, titleImage, content, id]);
+  await managementModel.delLabel([id]);
+  label.map(async v => {
+    await managementModel.saveLabel([id, v]);
+  })
+  ctx.body = { code: 1, message: '修改成功' };
 }
 
 exports.saveImage = async (ctx) => {
@@ -85,6 +95,16 @@ exports.getSummary = async (ctx) => {
 exports.getOneWeekLoginData = async ctx => {
   await managementModel.getOneWeekLoginData().then(res => {
     ctx.body = { code: 1, message: 'success', data: res }
+  }).catch(err => {
+    ctx.status = 500;
+    ctx.body = err;
+  })
+}
+
+exports.delArticle = async (ctx) => {
+  const { id } = ctx.request.body;
+  await managementModel.delArticle([id]).then(res => {
+    ctx.body = { code: 1, message: '删除成功' };
   }).catch(err => {
     ctx.status = 500;
     ctx.body = err;
